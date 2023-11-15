@@ -16,8 +16,8 @@ A simple application that performs the basic CRUD operations to a normal user re
     |
     | |-- client/
     | | |-- RMIClient.java // RMI client
-    | | |-- ClientMainGUI.java
     | | |-- GUI/
+    | | | |-- ClientMainGUI.java
     | | | |-- CreateGUI.java
     | | | |-- RetrieveGUI.java
     | | | |-- UpdateGUI.java
