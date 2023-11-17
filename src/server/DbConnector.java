@@ -6,10 +6,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 public class DbConnector {
+    static Dotenv dotenv = Dotenv.load();
+
     private static String url = "jdbc:mysql://localhost:3306/RMIForm";
-    private static String username = "root";
-    private static String password = "root";
+    private static String username = dotenv.get("U");
+    private static String password = dotenv.get("P");
 
     public static Connection getConnection() throws Exception {
         return DriverManager.getConnection(url, username, password);
