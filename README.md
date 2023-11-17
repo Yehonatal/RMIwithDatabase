@@ -13,6 +13,7 @@ A simple application that performs the basic CRUD operations to a normal user re
     | | |-- DbCrudImpl.java // Remote interface implementation
     | | |-- DbConnector.java // Db connector
     | | |-- RMIServer.java // RMI server
+    | | |-- User.java // User Class
     |
     | |-- client/
     | | |-- RMIClient.java // RMI client

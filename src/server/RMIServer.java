@@ -15,10 +15,8 @@ public class RMIServer {
         int PORT = Integer.parseInt(port);
 
          try {
-            // Create Registry object instance 
             Registry registry = LocateRegistry.createRegistry(PORT);
 
-            // Create the instance for the remote interface implementation 
             DbCrudImpl calImp = new DbCrudImpl();
             registry.rebind("CRUD", calImp);
             System.out.println("Server Listening: [PORT: " + PORT + "]");
