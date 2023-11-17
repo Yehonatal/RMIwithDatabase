@@ -11,7 +11,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class DbConnector {
     static Dotenv dotenv = Dotenv.load();
 
-    private static String url = "jdbc:mysql://localhost:3306/RMIForm";
+    private static String url = dotenv.get("URL");
     private static String username = dotenv.get("U");
     private static String password = dotenv.get("P");
 
