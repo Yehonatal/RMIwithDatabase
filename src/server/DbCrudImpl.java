@@ -75,7 +75,7 @@ public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
    @Override
     public void updateUser(User user) throws RemoteException {
         try {
-            String query = "UPDATE Users SET FirstName=?, LastName=?, Email=? WHERE FirstName=?";
+            String query = "UPDATE Users SET FirstName=?, LastName=?, Email=? , Password=? WHERE UserID=?";
 
             Connection conn = DbConnector.getConnection();
             PreparedStatement statement = conn.prepareStatement(query);
@@ -84,8 +84,8 @@ public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
             statement.setString(1, user.firstName);
             statement.setString(2, user.lastName);
             statement.setString(3, user.email);
-            // TODO : Find a way to use the userID for the conditioned selection 
-            statement.setString(4, user.firstName);
+            statement.setString(4, user.password);
+            statement.setInt(5, Integer.parseInt(user.UserID));
 
             // Execute the update
             int rowsAffected = statement.executeUpdate();
@@ -104,8 +104,8 @@ public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
         }
     }
 
-  /*   @Override
-    public void deleteUser(int userId) throws RemoteException {
+    @Override
+    public void deleteUser(int UserID) throws RemoteException {
         try {
             String query = "DELETE FROM Users WHERE UserId=?";
 
@@ -113,7 +113,7 @@ public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
             PreparedStatement statement = conn.prepareStatement(query);
 
             // Set values for parameters
-            statement.setInt(1, userId);
+            statement.setInt(1, UserID);
 
             // Execute the delete
             int rowsAffected = statement.executeUpdate();
@@ -131,7 +131,7 @@ public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
             e.printStackTrace();
         }
     }
- */
+
 
     
 }
