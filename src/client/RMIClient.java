@@ -27,12 +27,12 @@ public class RMIClient {
             // crudService.createUser(test);
 
             // * COMPLETE: Updating user details 
-            // User testUpdate = new User("testUpdate","testUpdate","testUpdate@gmail.com","testUpdate", "3");
+            // User testUpdate = new User("testUpdate","testUpdate","testUpdate@gmail.com","testUpdate", "5");
 
             // crudService.updateUser(testUpdate);
 
             // * COMPLETE: Deleting a user from the table
-            // crudService.deleteUser(3);
+            // crudService.deleteUser(4);
 
             System.out.println(result);
         } catch (Exception e) {

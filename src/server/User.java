@@ -15,7 +15,8 @@ public class User implements Serializable {
     }
 
     // Used for retrieving the users information
-    public User(String firstName, String lastName, String email) {
+    public User(int UserID, String firstName, String lastName, String email) {
+        this.UserID = Integer.toString(UserID);
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -28,7 +29,7 @@ public class User implements Serializable {
         this.email = email;
         this.password = password;
     }
-    
+
     // Used for Updating a user
     public User(String firstName, String lastName, String email,  String password, String UserID) {
         this.firstName = firstName;
@@ -40,7 +41,8 @@ public class User implements Serializable {
   
 
     public String getUser(){
-        return firstName + " " + lastName + " " + email;
+        return String.format("User ID: %s\nFirst Name: %s\nLast Name: %s\nEmail: %s\n", 
+                         UserID, firstName, lastName, email);
     }
 
  

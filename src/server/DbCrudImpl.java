@@ -1,16 +1,27 @@
 package server;
 
-// import java.sql.Statement;
+import java.sql.Statement;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 // import server.DbConnector;
 import java.util.List;
 
 public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
+    public Connection conn = null;
+    public Statement statement = null;
+    public PreparedStatement prepStatement = null;
+    public String query = "";
+
+    // Constant queries 
+    private static final String SELECT_USERS_QUERY = "SELECT * FROM Users";
+    private static final String INSERT_USER_QUERY = "INSERT INTO Users (FirstName, LastName, Email, Password) VALUES (?, ?, ?, ?)";
+    private static final String DELETE_USER_QUERY = "DELETE FROM Users WHERE UserId=?";
+    
     public DbCrudImpl() throws RemoteException {
         super();
     }
@@ -20,22 +31,22 @@ public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
         List<String> users = new ArrayList<>();
 
         try {
-            String query = "SELECT * FROM Users";
-            ResultSet resultSet = DbConnector.selectQuery(query);
+            conn = DbConnector.getConnection();
+            statement = conn.createStatement();
+
+            ResultSet resultSet = statement.executeQuery(SELECT_USERS_QUERY);
 
             while (resultSet.next()) {
+                int UserId = resultSet.getInt("UserID");
                 String firstName = resultSet.getString("FirstName");
                 String lastName = resultSet.getString("LastName");
                 String email = resultSet.getString("Email");
 
-                User user = new User(firstName, lastName, email);
+                User user = new User(UserId, firstName, lastName, email);
                 users.add(user.getUser());
             }
-            // Close the connection after processing the ResultSet
-            Connection conn = resultSet.getStatement().getConnection();
-            DbConnector.closeConnection(conn);
 
-            resultSet.close();
+            closeDatabaseResources(); 
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,21 +57,18 @@ public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
      @Override
     public void createUser(User user) throws RemoteException {
         try {
-            String query = "INSERT INTO Users (FirstName, LastName, Email, Password) VALUES (?, ?, ?, ?)";
+            conn = DbConnector.getConnection();
+            prepStatement = conn.prepareStatement(INSERT_USER_QUERY);
 
-            Connection conn = DbConnector.getConnection();
-            PreparedStatement statement = conn.prepareStatement(query);
+            prepStatement.setString(1, user.firstName);
+            prepStatement.setString(2, user.lastName);
+            prepStatement.setString(3, user.email);
+            prepStatement.setString(4, user.password);
 
-            statement.setString(1, user.firstName);
-            statement.setString(2, user.lastName);
-            statement.setString(3, user.email);
-            statement.setString(4, user.password);
+            int rowsAffected = prepStatement.executeUpdate();
 
-            int rowsAffected = statement.executeUpdate();
+            closeDatabaseResources();
 
-            // Close resources
-            statement.close();
-            conn.close();
 
             if (rowsAffected > 0) {
                 System.out.println("User created successfully.");
@@ -75,24 +83,21 @@ public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
    @Override
     public void updateUser(User user) throws RemoteException {
         try {
-            String query = "UPDATE Users SET FirstName=?, LastName=?, Email=? , Password=? WHERE UserID=?";
+            query = "UPDATE Users SET FirstName=?, LastName=?, Email=? , Password=? WHERE UserID=?";
 
-            Connection conn = DbConnector.getConnection();
-            PreparedStatement statement = conn.prepareStatement(query);
+            conn = DbConnector.getConnection();
+            prepStatement = conn.prepareStatement(query);
 
-            // Set values for parameters
-            statement.setString(1, user.firstName);
-            statement.setString(2, user.lastName);
-            statement.setString(3, user.email);
-            statement.setString(4, user.password);
-            statement.setInt(5, Integer.parseInt(user.UserID));
+            prepStatement.setString(1, user.firstName);
+            prepStatement.setString(2, user.lastName);
+            prepStatement.setString(3, user.email);
+            prepStatement.setString(4, user.password);
+            prepStatement.setInt(5, Integer.parseInt(user.UserID));
 
-            // Execute the update
-            int rowsAffected = statement.executeUpdate();
+            int rowsAffected = prepStatement.executeUpdate();
 
-            // Close resources
-            statement.close();
-            conn.close();
+            closeDatabaseResources();
+
 
             if (rowsAffected > 0) {
                 System.out.println("User updated successfully.");
@@ -107,20 +112,14 @@ public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
     @Override
     public void deleteUser(int UserID) throws RemoteException {
         try {
-            String query = "DELETE FROM Users WHERE UserId=?";
+            conn = DbConnector.getConnection();
+            prepStatement = conn.prepareStatement(DELETE_USER_QUERY);
 
-            Connection conn = DbConnector.getConnection();
-            PreparedStatement statement = conn.prepareStatement(query);
+            prepStatement.setInt(1, UserID);
 
-            // Set values for parameters
-            statement.setInt(1, UserID);
+            int rowsAffected = prepStatement.executeUpdate();
 
-            // Execute the delete
-            int rowsAffected = statement.executeUpdate();
-
-            // Close resources
-            statement.close();
-            conn.close();
+            closeDatabaseResources();
 
             if (rowsAffected > 0) {
                 System.out.println("User deleted successfully.");
@@ -128,6 +127,22 @@ public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
                 System.out.println("Failed to delete user. User may not exist.");
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void closeDatabaseResources() {
+        try {
+            if (prepStatement != null) {
+                prepStatement.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
