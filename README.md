@@ -1,6 +1,6 @@
 ## CRUD OPS + RMI + GUI
 
-A simple application that performs the basic CRUD operations to a normal user registration form coupled with the basics of RMI to have remote access to the functionalities of the application from a remote or local device.
+A simple application that performs the basic CRUD operations to a normal user registration form coupled with the basics of RMI to have remote access to the functionalities of the application from a remote or local machine.
 
 ## Folder Structure
 

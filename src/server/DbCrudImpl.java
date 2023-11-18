@@ -146,7 +146,4 @@ public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
             e.printStackTrace();
         }
     }
-
-
-    
 }
