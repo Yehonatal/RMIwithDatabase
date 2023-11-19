@@ -9,5 +9,4 @@ public interface DbCrud extends Remote {
     void createUser(User user) throws RemoteException;
     void deleteUser(int UserID) throws RemoteException;
     void updateUser(User user) throws RemoteException;
-    
 }

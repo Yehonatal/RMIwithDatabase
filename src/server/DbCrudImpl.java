@@ -54,7 +54,7 @@ public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
         return users;
     }
 
-     @Override
+    @Override
     public void createUser(User user) throws RemoteException {
         try {
             conn = DbConnector.getConnection();
@@ -66,9 +66,8 @@ public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
             prepStatement.setString(4, user.password);
 
             int rowsAffected = prepStatement.executeUpdate();
-
+            
             closeDatabaseResources();
-
 
             if (rowsAffected > 0) {
                 System.out.println("User created successfully.");
@@ -80,7 +79,7 @@ public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
         }
     }
 
-   @Override
+    @Override
     public void updateUser(User user) throws RemoteException {
         try {
             query = "UPDATE Users SET FirstName=?, LastName=?, Email=? , Password=? WHERE UserID=?";
