@@ -1,6 +1,8 @@
 package client;
 import java.rmi.Naming;
 
+import javax.swing.SwingUtilities;
+
 import client.GUI.ClientMainGUI;
 import io.github.cdimascio.dotenv.Dotenv;
 import server.DbCrud;
@@ -22,10 +24,14 @@ public class RMIClient {
     }
 
     private static void startGUI() {
-        try {
-            new ClientMainGUI();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    new ClientMainGUI();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
