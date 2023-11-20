@@ -12,7 +12,7 @@ import java.awt.*;
 
 public class ClientMainGUI {
     private static DbCrud crudServiceGUI;
-    private static List<String> users;
+    private static List<User> users;
 
     private static JFrame homeWindow;
     private static JPanel optionButtons;
@@ -56,13 +56,13 @@ public class ClientMainGUI {
         });
     }
 
-    public static void getUsersFromServer() {
+    public static List<User> getUsersFromServer() {
         try {
             users = crudServiceGUI.retrieveUsers();
-            System.out.println(users);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+        return users;
     }
 
     public static void createUser(User user) {
@@ -77,7 +77,8 @@ public class ClientMainGUI {
     public static void updateUser(User user) {
         try {
             crudServiceGUI.updateUser(user);
-            getUsersFromServer();
+            List<User> users = getUsersFromServer();
+            System.out.println(users);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -86,7 +87,8 @@ public class ClientMainGUI {
     public static void deleteUser(int userId) {
         try {
             crudServiceGUI.deleteUser(userId);
-            getUsersFromServer();
+            List<User> users = getUsersFromServer();
+            System.out.println(users);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

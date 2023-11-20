@@ -1,28 +1,28 @@
 package server;
-// Implement serialization so the class can be sent over RMI
+
 import java.io.Serializable;
 
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
+    public int userID;
     public String firstName;
     public String lastName;
     public String email;
     public String password;
-    public String UserID;
 
     // For Development
     public User() {
     }
 
-    // Used for retrieving the users information
-    public User(int UserID, String firstName, String lastName, String email) {
-        this.UserID = Integer.toString(UserID);
+    // Used for retrieving the users' information
+    public User(String firstName, String lastName, String email, int userID) {
+        this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
-  
+
     // Used for creating a user
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
@@ -32,19 +32,27 @@ public class User implements Serializable {
     }
 
     // Used for Updating a user
-    public User(String firstName, String lastName, String email,  String password, String UserID) {
+    public User(String firstName, String lastName, String email, String password, int userID) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.UserID = UserID;
-    }
-  
-
-    public String getUser(){
-        return String.format("User ID: %s\nFirst Name: %s\nLast Name: %s\nEmail: %s\n", 
-                         UserID, firstName, lastName, email);
+        this.userID = userID;
     }
 
- 
+    public int getUserID() {
+        return userID;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 }

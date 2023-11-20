@@ -27,8 +27,8 @@ public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
     }
 
     @Override
-    public List<String> retrieveUsers() throws RemoteException {
-        List<String> users = new ArrayList<>();
+    public List<User> retrieveUsers() throws RemoteException {
+        List<User> users = new ArrayList<>();
 
         try {
             conn = DbConnector.getConnection();
@@ -37,13 +37,13 @@ public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
             ResultSet resultSet = statement.executeQuery(SELECT_USERS_QUERY);
 
             while (resultSet.next()) {
-                int UserId = resultSet.getInt("UserID");
+                int userId = resultSet.getInt("UserID");  // Make sure "UserID" matches the column name in your database
                 String firstName = resultSet.getString("FirstName");
                 String lastName = resultSet.getString("LastName");
                 String email = resultSet.getString("Email");
 
-                User user = new User(UserId, firstName, lastName, email);
-                users.add(user.getUser());
+                User user = new User(firstName, lastName, email, userId);
+                users.add(user);
             }
 
             closeDatabaseResources(); 
@@ -91,7 +91,7 @@ public class DbCrudImpl extends UnicastRemoteObject implements DbCrud{
             prepStatement.setString(2, user.lastName);
             prepStatement.setString(3, user.email);
             prepStatement.setString(4, user.password);
-            prepStatement.setInt(5, Integer.parseInt(user.UserID));
+            prepStatement.setInt(5,user.userID);
 
             int rowsAffected = prepStatement.executeUpdate();
 
