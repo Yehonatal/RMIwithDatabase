@@ -17,6 +17,7 @@ public class DeleteGUI extends JFrame {
     private static JTable table;
     private static JScrollPane scrollPane;
     private static JPanel box;
+    private static JButton reloadBtn;
 
     public DeleteGUI() {
         setTitle("Delete a User");
@@ -50,6 +51,11 @@ public class DeleteGUI extends JFrame {
         anchor.gridx = 0;
         anchor.gridy = 1;
 
+        reloadBtn = new JButton("Reload Table");
+        anchor.gridx++;
+        box.add(reloadBtn, anchor);
+
+        anchor.gridy++;
         userID = new JLabel("UserID: ");
         userIdField = new JTextField(5);
         deleteUserBtn = new JButton("Delete User");
@@ -81,6 +87,9 @@ public class DeleteGUI extends JFrame {
             } else {
                 dispose();
             }
+        });
+        reloadBtn.addActionListener(e -> {
+            reloadTable();
         });
     }
 
